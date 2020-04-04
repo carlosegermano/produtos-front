@@ -9,6 +9,12 @@
 
     <div class="container">
 
+      <ul>
+        <li v-for="(erro, index) of errors" :key="index">
+          campo <b>{{ erro.field }}</b> - {{ erro.defaultMessage }}
+        </li>
+      </ul>
+
       <form @submit.prevent="salvar">
 
           <label>Nome</label>
@@ -72,7 +78,8 @@ export default {
         quantidade: '',
         valor: ''
       },
-      produtos: []
+      produtos: [],
+      errors: []
     }
   },
 
@@ -92,9 +99,13 @@ export default {
       Produto.salvar(this.produto).then(resposta => {
         this.produto = {}
         alert('Produto cadastrado com sucesso!')
+        {{ resposta.data }} // Coloquei isso para remover o erro "variável resposta criada mas não usada" (página não recarrega automaticamente ao salvar este arquivo)
         this.listar()
+      }).catch(e =>{
+        this.errors = e.response.data.errors
       })
     }
+  
   }
 
 }
